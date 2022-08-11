@@ -207,30 +207,30 @@ textboxes = array_create(0);
 textboxTimer = 0;
 
 //Top left
-mint_add_button(6, 6, "tl", 88, 30, 6, sprMintIcon, 0, nop);
-mint_add_button(98, 6, "tl", 88, 30, 6, sprMintIcon, 1, nop);
-mint_add_button(6, 40, "tl", 88, 30, 6, sprMintIcon, 2, nop);
-mint_add_button(98, 40, "tl", 88, 30, 6, sprMintIcon, 3, nop);
-mint_add_button(6, 74, "tl", 88, 30, 6, sprMintIcon, 4, nop);
-mint_add_button(98, 74, "tl", 88, 30, 6, sprMintIcon, 5, nop);
+mint_add_button(6, 6, "tl", 88, 30, 6, sprMintIcon, 0, "Save", nop);
+mint_add_button(98, 6, "tl", 88, 30, 6, sprMintIcon, 1, "Room settings", nop);
+mint_add_button(6, 40, "tl", 88, 30, 6, sprMintIcon, 2, "Instances", nop);
+mint_add_button(98, 40, "tl", 88, 30, 6, sprMintIcon, 3, "Tiles", nop);
+mint_add_button(6, 74, "tl", 88, 30, 6, sprMintIcon, 4, "Backgrounds", nop);
+mint_add_button(98, 74, "tl", 88, 30, 6, sprMintIcon, 5, "Views", nop);
 
 //Left
 for(var i = 0; i &lt; 4; i++)
 {
-    mint_add_button(6 + 46 * i, 6, "l", 42, 42, 6, sprMiku+i, 0, nop);
+    mint_add_button(6 + 46 * i, 6, "l", 42, 42, 6, sprMiku+i, 0, "", nop);
 }
 
 //Top
-mint_add_button(2, 4, "t", 24, 24, 4, sprMintIconMini, 0, nop);
-mint_add_button(46, 4, "t", 24, 24, 4, sprMintIconMini, 1, mint_callback_switch, "showGrid");
-mint_add_textbox(74, 4, "t", 32, 24, 4, snapX, true, mint_callback_update_snap, mint_callback_finish_snap, true, true);
-mint_add_textbox(110, 4, "t", 32, 24, 4, snapY, true, mint_callback_update_snap, mint_callback_finish_snap, false, false);
-mint_add_button(162, 4, "t", 24, 24, 4, sprMintIconMini, 2, mint_callback_switch, "showObjects");
-mint_add_button(190, 4, "t", 24, 24, 4, sprMintIconMini, 3, mint_callback_switch, "showInvisibleObjects");
-mint_add_button(218, 4, "t", 24, 24, 4, sprMintIconMini, 4, mint_callback_switch, "showTiles");
-mint_add_button(246, 4, "t", 24, 24, 4, sprMintIconMini, 5, mint_callback_switch, "showBackgrounds");
-mint_add_button(274, 4, "t", 24, 24, 4, sprMintIconMini, 6, mint_callback_switch, "showForegrounds");
-mint_add_button(302, 4, "t", 24, 24, 4, sprMintIconMini, 7, nop);
+mint_add_button(2, 4, "t", 24, 24, 4, sprMintIconMini, 0, "Undo", nop);
+mint_add_button(46, 4, "t", 24, 24, 4, sprMintIconMini, 1, "Show grid", mint_callback_switch, "showGrid");
+mint_add_textbox(74, 4, "t", 32, 24, 4, snapX, true, "", mint_callback_update_snap, mint_callback_finish_snap, true, true);
+mint_add_textbox(110, 4, "t", 32, 24, 4, snapY, true, "", mint_callback_update_snap, mint_callback_finish_snap, false, false);
+mint_add_button(162, 4, "t", 24, 24, 4, sprMintIconMini, 2, "Show instances", mint_callback_switch, "showObjects");
+mint_add_button(190, 4, "t", 24, 24, 4, sprMintIconMini, 3, "Show instances of invisible objects", mint_callback_switch, "showInvisibleObjects");
+mint_add_button(218, 4, "t", 24, 24, 4, sprMintIconMini, 4, "Show tiles", mint_callback_switch, "showTiles");
+mint_add_button(246, 4, "t", 24, 24, 4, sprMintIconMini, 5, "Show backgrounds", mint_callback_switch, "showBackgrounds");
+mint_add_button(274, 4, "t", 24, 24, 4, sprMintIconMini, 6, "Show foregrounds", mint_callback_switch, "showForegrounds");
+mint_add_button(302, 4, "t", 24, 24, 4, sprMintIconMini, 7, "Show views", nop);
 </string>
           </argument>
         </arguments>
@@ -584,6 +584,7 @@ if (mode == "instances")
             if (_button[? "visible"] &amp;&amp; (mint_in_range(mouse_window_x - _ox, _button[? "x"], _button[? "x"] + _button[? "width"] - 1)) &amp;&amp; (mint_in_range(mouse_window_y - _oy, _button[? "y"], _button[? "y"] + _button[? "height"] - 1)))
             {
                 hoveredButton = _button;
+                tooltip = hoveredButton[? "tooltip"];
             }
         }
         if (hoveredButton != noone &amp;&amp; mouse_check_button_pressed(mb_left))
@@ -601,24 +602,23 @@ if (mode == "instances")
                 if (_textbox[? "visible"] &amp;&amp; (mint_in_range(mouse_window_x - _ox, _textbox[? "x"], _textbox[? "x"] + _textbox[? "width"] - 1)) &amp;&amp; (mint_in_range(mouse_window_y - _oy, _textbox[? "y"], _textbox[? "y"] + _textbox[? "height"] - 1)))
                 {
                     hoveredTextbox = _textbox;
+                    tooltip = _textbox[? "tooltip"];
                 }
             }
             if (hoveredTextbox != noone)
             {
-                if (mouse_check_button_pressed(mb_left))
+                if (mouse_check_button_pressed(mb_left) || mouse_check_button_pressed(mb_right))
                 {
                     selectedTextbox = hoveredTextbox;
                     textboxTimer = 0;
                     keyboard_lastkey = -1;
                     keyboard_lastchar = "";
-                }
-                else if (mouse_check_button_pressed(mb_right))
-                {
-                    selectedTextbox = hoveredTextbox;
-                    textboxTimer = 0;
-                    keyboard_lastkey = -1;
-                    keyboard_lastchar = "";
-                    selectedTextbox[? "value"] = "";
+                    if (mouse_check_button_pressed(mb_right))
+                    {
+                        selectedTextbox[? "value"] = "";
+                        selectedTextbox[? "display text"] = "";
+                        selectedTextbox[? "tooltip"] = "";
+                    }
                 }
             }
         }
@@ -695,45 +695,59 @@ if (selectedTextbox != noone)
 {
     if (keyboard_lastkey != -1)
     {
-        var update = false;
-        var text = string(selectedTextbox[? "value"]);
+        var _textbox = selectedTextbox;
+        var _update = false;
+        var _text = string(selectedTextbox[? "value"]);
         if (keyboard_lastkey == vk_enter)
         {
-            script_execute(selectedTextbox[? "finish"], selectedTextbox, selectedTextbox[? "finish arg"]);
+            script_execute(_textbox[? "finish"], _textbox, _textbox[? "finish arg"]);
             selectedTextbox = noone;
         }
         else if (keyboard_lastkey == vk_backspace)
         {
-            if (string_length(text) &gt; 0)
+            if (string_length(_text) &gt; 0)
             {
-                text = string_delete(text, string_length(text), 1);
-                update = true;
+                _text = string_delete(_text, string_length(_text), 1);
+                _update = true;
             }
         }
         else if (keyboard_lastchar != "")
         {
-            text += keyboard_lastchar;
-            update = true;
+            _text += keyboard_lastchar;
+            _update = true;
         }
         
-        if (update)
+        if (_update)
         {
-            if (selectedTextbox[? "numeric"])
+            if (_textbox[? "numeric"])
             {
-                if (string_digits(text) == text)
+                if (string_digits(_text) == _text)
                 {
-                    selectedTextbox[? "value"] = real(text);
-                    script_execute(selectedTextbox[? "update"], selectedTextbox[? "value"], selectedTextbox[? "update arg"]);
+                    _textbox[? "value"] = real(_text);
+                    script_execute(_textbox[? "update"], _textbox[? "value"], _textbox[? "update arg"]);
                 }
                 else
                 {
-                    selectedTextbox[? "value"] = text;
+                    _textbox[? "value"] = _text;
                 }
             }
             else
             {
-                selectedTextbox[? "value"] = text;
+                _textbox[? "value"] = _text;
             }
+        }
+        
+        draw_set_font(font);
+        var _chars = floor((_textbox[? "width"] - 8) / string_width("a"));
+        var _del = max(string_length(_textbox[? "value"]) - _chars, 0);
+        _textbox[? "display text"] = string_delete(_textbox[? "value"], 1, _del);
+        if (_del &gt; 0)
+        {
+            _textbox[? "tooltip"] = string(_textbox[? "value"]);
+        }
+        else
+        {
+            _textbox[? "tooltip"] = "";
         }
             
         keyboard_lastkey = -1;
@@ -1005,6 +1019,40 @@ else if (state == "playtest")
     <event eventtype="8" enumb="64">
       <action>
         <libid>1</libid>
+        <id>408</id>
+        <kind>0</kind>
+        <userelative>0</userelative>
+        <isquestion>-1</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>1</exetype>
+        <functionname>action_if</functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>0</kind>
+            <string>state == "editor"</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>422</id>
+        <kind>1</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>0</useapplyto>
+        <exetype>0</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+      </action>
+      <action>
+        <libid>1</libid>
         <id>603</id>
         <kind>7</kind>
         <userelative>0</userelative>
@@ -1019,79 +1067,90 @@ else if (state == "playtest")
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (state == "editor")
+            <string>var xx = view_xview, yy = view_yview;
+mint_mouse_update();
+
+if (showGrid)
 {
-    var xx = view_xview, yy = view_yview;
-    mint_mouse_update();
-    
-    if (showGrid)
-    {
-        draw_set_color(c_black);
-        draw_set_alpha(0.15);
-            if (snapX &gt; 1)
-            {
-                for(var xx = -view_xview * zoom; xx &lt; (room_width - view_xview) * zoom; xx += snapX * zoom)
-                {
-                    draw_line(xx, -view_yview * zoom, xx, (room_height - view_yview) * zoom);
-                }
-                draw_line((room_width - view_xview) * zoom, -view_yview * zoom, (room_width - view_xview) * zoom, (room_height - view_yview) * zoom);
-            }
-            if (snapY &gt; 1)
-            {
-                for(var yy = -view_yview * zoom; yy &lt; (room_height - view_yview) * zoom; yy += snapY * zoom)
-                {
-                    draw_line(-view_xview * zoom, yy, (room_width - view_xview) * zoom, yy);
-                }
-                draw_line(-view_xview * zoom, (room_height - view_yview) * zoom, (room_width - view_xview) * zoom, (room_height - view_yview) * zoom);
-            }
-        draw_set_alpha(1);
-    }
-    
-    var alpha = (dsin(current_time / 5) + 1) / 8 + 0.25;
-    d3d_set_fog(1, c_blue, 0, 0);
-    for (var i = 0; i &lt; ds_list_size(selectedInstances); i++)
-    {
-        with(selectedInstances[| i])
+    draw_set_color(c_black);
+    draw_set_alpha(0.15);
+        if (snapX &gt; 1)
         {
-            draw_sprite_ext(sprite_index, image_index, other.zoom * (x - view_xview), other.zoom * (y - view_yview), other.zoom * image_xscale, other.zoom * image_yscale, image_angle, image_blend, alpha);
+            for(var xx = -view_xview * zoom; xx &lt; (room_width - view_xview) * zoom; xx += snapX * zoom)
+            {
+                draw_line(xx, -view_yview * zoom, xx, (room_height - view_yview) * zoom);
+            }
+            draw_line((room_width - view_xview) * zoom, -view_yview * zoom, (room_width - view_xview) * zoom, (room_height - view_yview) * zoom);
         }
-    }
-    d3d_set_fog(0, 0, 0, 0);
-    
-    if (hoveredInstance != noone)
-    {
-        mint_highlight_rectangle(hoveredInstance.bbox_left, hoveredInstance.bbox_top, hoveredInstance.bbox_right, hoveredInstance.bbox_bottom, 0.5, true);
-    }
-    if (!ds_list_empty(selectedInstances))
-    {
-        mint_highlight_rectangle(selectionLeft, selectionTop, selectionRight, selectionBottom, 1, true);
-        mint_draw_scale_handles();
-    }
-    if (mouseState = "selection")
-    {
-        mint_highlight_rectangle(clickStartX, clickStartY, mouse_room_x, mouse_room_y, 1, true);
-    }
-    
-    draw_set_color(colorFillDark);
-    draw_rectangle(0, 0, lm-1, sh-1, false);
-    draw_rectangle(lm, 0, sw-rm-1, tm-1, false);
-    draw_rectangle(lm, sh-bm, sw-rm-1, sh-1, false);
-    draw_rectangle(sw-rm, 0, sw-1, sh-1, false);
-    
-    var m = 2;
-    mint_draw_rounded_rectangle(m, m, lm-m-1, tlm-1, 6, colorFillLight);
-    mint_draw_rounded_rectangle(m, tlm+m, lm-m-1, sh-m-1, 6, colorFillLight);
-    mint_draw_rounded_rectangle(lm, m, sw-rm-1, tm-m-1, 6, colorFillLight);
-    mint_draw_rounded_rectangle(lm, sh-bm+m, sw-rm-1, sh-m-1, 6, colorFillLight);
-    mint_draw_rounded_rectangle(sw-rm+m, m, sw-m-1, sh-m-1, 6, colorFillLight);
-    
-    mint_draw_gui_elements();
-    
-    mint_draw_tooltip();
+        if (snapY &gt; 1)
+        {
+            for(var yy = -view_yview * zoom; yy &lt; (room_height - view_yview) * zoom; yy += snapY * zoom)
+            {
+                draw_line(-view_xview * zoom, yy, (room_width - view_xview) * zoom, yy);
+            }
+            draw_line(-view_xview * zoom, (room_height - view_yview) * zoom, (room_width - view_xview) * zoom, (room_height - view_yview) * zoom);
+        }
+    draw_set_alpha(1);
 }
+
+var alpha = (dsin(current_time / 5) + 1) / 8 + 0.25;
+d3d_set_fog(1, c_blue, 0, 0);
+for (var i = 0; i &lt; ds_list_size(selectedInstances); i++)
+{
+    with(selectedInstances[| i])
+    {
+        draw_sprite_ext(sprite_index, image_index, other.zoom * (x - view_xview), other.zoom * (y - view_yview), other.zoom * image_xscale, other.zoom * image_yscale, image_angle, image_blend, alpha);
+    }
+}
+d3d_set_fog(0, 0, 0, 0);
+
+if (hoveredInstance != noone)
+{
+    mint_highlight_rectangle(hoveredInstance.bbox_left, hoveredInstance.bbox_top, hoveredInstance.bbox_right, hoveredInstance.bbox_bottom, 0.5, true);
+}
+if (!ds_list_empty(selectedInstances))
+{
+    mint_highlight_rectangle(selectionLeft, selectionTop, selectionRight, selectionBottom, 1, true);
+    mint_draw_scale_handles();
+}
+if (mouseState = "selection")
+{
+    mint_highlight_rectangle(clickStartX, clickStartY, mouse_room_x, mouse_room_y, 1, true);
+}
+
+draw_set_color(colorFillDark);
+draw_rectangle(0, 0, lm-1, sh-1, false);
+draw_rectangle(lm, 0, sw-rm-1, tm-1, false);
+draw_rectangle(lm, sh-bm, sw-rm-1, sh-1, false);
+draw_rectangle(sw-rm, 0, sw-1, sh-1, false);
+
+var m = 2;
+mint_draw_rounded_rectangle(m, m, lm-m-1, tlm-1, 6, colorFillLight);
+mint_draw_rounded_rectangle(m, tlm+m, lm-m-1, sh-m-1, 6, colorFillLight);
+mint_draw_rounded_rectangle(lm, m, sw-rm-1, tm-m-1, 6, colorFillLight);
+mint_draw_rounded_rectangle(lm, sh-bm+m, sw-rm-1, sh-m-1, 6, colorFillLight);
+mint_draw_rounded_rectangle(sw-rm+m, m, sw-m-1, sh-m-1, 6, colorFillLight);
+
+mint_draw_gui_elements();
+
+mint_draw_tooltip();
 </string>
           </argument>
         </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>424</id>
+        <kind>2</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>0</useapplyto>
+        <exetype>0</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
       </action>
     </event>
   </events>

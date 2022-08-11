@@ -56,10 +56,10 @@ for(var i = 0; i < array_length_1d(textboxes); i++)
     draw_set_halign(fa_left);
     draw_set_valign(fa_middle);
     draw_set_color(c_black);
-    draw_text(_textbox[? "x"] + _ox + 4, _textbox[? "y"] + _oy + _textbox[? "height"] / 2, string(_textbox[? "value"]));
+    draw_text(_textbox[? "x"] + _ox + 4, _textbox[? "y"] + _oy + _textbox[? "height"] / 2, string(_textbox[? "display text"]));
     if (selectedTextbox == _textbox && textboxTimer < 20)
     {
-        draw_text(_textbox[? "x"] + _ox + 1 + string_width(string(_textbox[? "value"])), _textbox[? "y"] + _oy + _textbox[? "height"] / 2, "|");
+        draw_text(_textbox[? "x"] + _ox + 1 + string_width(string(_textbox[? "display text"])), _textbox[? "y"] + _oy + _textbox[? "height"] / 2, "|");
     }
 }
 
@@ -142,7 +142,7 @@ draw_circle(x1+rad-1, y2-rad, rad, false);
 draw_circle(x2-rad, y2-rad, rad, false);
 
 #define mint_add_button
-///mint_add_button(x, y, anchor, width, height, radius, sprite, image, callback, [callback arg], [visible])
+///mint_add_button(x, y, anchor, width, height, radius, sprite, image, tooltip, callback, [callback arg], [visible])
 
 var _index = array_length_1d(buttons);
 var _button = ds_map_create();
@@ -155,16 +155,17 @@ _button[? "height"] = argument[4];
 _button[? "radius"] = argument[5];
 _button[? "sprite"] = argument[6];
 _button[? "image"] = argument[7];
-_button[? "callback"] = argument[8];
+_button[? "tooltip"] = argument[8];
+_button[? "callback"] = argument[9];
 _button[? "callback arg"] = undefined;
-if (argument_count >= 10)
-{
-    _button[? "callback arg"] = argument[9];
-}
-_button[? "visible"] = true;
 if (argument_count >= 11)
 {
-    _button[? "visible"] = argument[10];
+    _button[? "callback arg"] = argument[10];
+}
+_button[? "visible"] = true;
+if (argument_count >= 12)
+{
+    _button[? "visible"] = argument[11];
 }
 
 _button[? "on"] = true;
@@ -299,7 +300,7 @@ for(var i = 0; i < 8; i++)
 return noone;
 
 #define mint_add_textbox
-///mint_add_textbox(x, y, anchor, width, height, radius, value, numeric, update, finish, [update arg], [finish arg], [visible])
+///mint_add_textbox(x, y, anchor, width, height, radius, value, numeric, tooltip, update, finish, [update arg], [finish arg], [visible])
 
 var _index = array_length_1d(textboxes);
 var _textbox = ds_map_create();
@@ -311,24 +312,27 @@ _textbox[? "width"] = argument[3];
 _textbox[? "height"] = argument[4];
 _textbox[? "radius"] = argument[5];
 _textbox[? "value"] = argument[6];
-_textbox[? "numeric"] = argument[7]
-_textbox[? "update"] = argument[8];
-_textbox[? "finish"] = argument[9];
+_textbox[? "numeric"] = argument[7];
+_textbox[? "tooltip"] = argument[8];
+_textbox[? "update"] = argument[9];
+_textbox[? "finish"] = argument[10];
 _textbox[? "update arg"] = undefined;
-if (argument_count >= 11)
-{
-    _textbox[? "update arg"] = argument[10];
-}
-_textbox[? "finish arg"] = undefined;
 if (argument_count >= 12)
 {
-    _textbox[? "finish arg"] = argument[11];
+    _textbox[? "update arg"] = argument[11];
 }
-_textbox[? "visible"] = true;
+_textbox[? "finish arg"] = undefined;
 if (argument_count >= 13)
 {
-    _textbox[? "visible"] = argument[12];
+    _textbox[? "finish arg"] = argument[12];
 }
+_textbox[? "visible"] = true;
+if (argument_count >= 14)
+{
+    _textbox[? "visible"] = argument[13];
+}
+
+_textbox[? "display text"] = _textbox[? "value"];
 
 textboxes[_index] = _textbox;
 
