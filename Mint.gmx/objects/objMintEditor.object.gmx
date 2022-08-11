@@ -45,7 +45,7 @@ bindRestart = ord('R');
 wview = 800;
 hview = 608;
 
-defaultSprite = sprSecretItem;
+defaultSprite = sprMintDefault;
 viewLerp = 0.25;
 font = fMint;
 
@@ -170,7 +170,11 @@ mint_get_scale_handles();
 scaleState = 0
 
 showGrid = true;
-
+showObjects = true;
+showInvisibleObjects = true;
+showTiles = true;
+showBackgrounds = true;
+showForegrounds = true;
 
 mint_mouse_update(true);
 </string>
@@ -218,14 +222,14 @@ for(var i = 0; i &lt; 4; i++)
 
 //Top
 mint_add_button(2, 4, "t", 24, 24, 4, sprMintIconMini, 0, nop);
-mint_add_button(46, 4, "t", 24, 24, 4, sprMintIconMini, 1, mint_callback_switch_bool, "showGrid");
+mint_add_button(46, 4, "t", 24, 24, 4, sprMintIconMini, 1, mint_callback_switch, "showGrid");
 mint_add_textbox(74, 4, "t", 32, 24, 4, snapX, true, mint_callback_update_snap, mint_callback_finish_snap, true, true);
 mint_add_textbox(110, 4, "t", 32, 24, 4, snapY, true, mint_callback_update_snap, mint_callback_finish_snap, false, false);
-mint_add_button(162, 4, "t", 24, 24, 4, sprMintIconMini, 2, nop);
-mint_add_button(190, 4, "t", 24, 24, 4, sprMintIconMini, 3, nop);
-mint_add_button(218, 4, "t", 24, 24, 4, sprMintIconMini, 4, nop);
-mint_add_button(246, 4, "t", 24, 24, 4, sprMintIconMini, 5, nop);
-mint_add_button(274, 4, "t", 24, 24, 4, sprMintIconMini, 6, nop);
+mint_add_button(162, 4, "t", 24, 24, 4, sprMintIconMini, 2, mint_callback_switch, "showObjects");
+mint_add_button(190, 4, "t", 24, 24, 4, sprMintIconMini, 3, mint_callback_switch, "showInvisibleObjects");
+mint_add_button(218, 4, "t", 24, 24, 4, sprMintIconMini, 4, mint_callback_switch, "showTiles");
+mint_add_button(246, 4, "t", 24, 24, 4, sprMintIconMini, 5, mint_callback_switch, "showBackgrounds");
+mint_add_button(274, 4, "t", 24, 24, 4, sprMintIconMini, 6, mint_callback_switch, "showForegrounds");
 mint_add_button(302, 4, "t", 24, 24, 4, sprMintIconMini, 7, nop);
 </string>
           </argument>
@@ -362,7 +366,7 @@ if (mint_mouse_in_room_view())
 {
     with(objMintInstance)
     {
-        if (mint_in_range(mouse_room_x, bbox_left, bbox_right) &amp;&amp; mint_in_range(mouse_room_y, bbox_top, bbox_bottom))
+        if (visible &amp;&amp; mint_in_range(mouse_room_x, bbox_left, bbox_right) &amp;&amp; mint_in_range(mouse_room_y, bbox_top, bbox_bottom))
         {
             other.hoveredInstance = id;
             break;
@@ -499,7 +503,7 @@ if (mode == "instances")
                     var selB = max(clickStartY, mouse_room_y);
                     with(objMintInstance)
                     {
-                        if (selL &lt;= bbox_right &amp;&amp; selT &lt;= bbox_bottom &amp;&amp; selR &gt;= bbox_left &amp;&amp; selB &gt;= bbox_top)
+                        if (visible &amp;&amp; selL &lt;= bbox_right &amp;&amp; selT &lt;= bbox_bottom &amp;&amp; selR &gt;= bbox_left &amp;&amp; selB &gt;= bbox_top)
                         {
                             var index = ds_list_find_index(other.selectedInstances, id);
                             if (index == -1)

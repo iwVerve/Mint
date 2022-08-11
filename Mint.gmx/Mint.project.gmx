@@ -173,6 +173,7 @@
     </sprites>
     <sprite>sprites\sprMintIcon</sprite>
     <sprite>sprites\sprMintIconMini</sprite>
+    <sprite>sprites\sprMintDefault</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bAllTiles</background>
