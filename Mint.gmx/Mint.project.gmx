@@ -172,6 +172,7 @@
       <sprite>sprites\sprBossItem</sprite>
     </sprites>
     <sprite>sprites\sprMintIcon</sprite>
+    <sprite>sprites\sprMintIconMini</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bAllTiles</background>
@@ -273,14 +274,14 @@
     <script>scripts\mint_gui.gml</script>
     <script>scripts\mint_util.gml</script>
     <script>scripts\mint_callback.gml</script>
-    <script>scripts\print.gml</script>
+    <script>scripts\nop.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fDefault30</font>
     <font>fonts\fDefault24</font>
     <font>fonts\fDefault18</font>
     <font>fonts\fDefault12</font>
-    <font>fonts\fEditor</font>
+    <font>fonts\fMint</font>
   </fonts>
   <objects name="objects">
     <object>objects\objMintEditor</object>

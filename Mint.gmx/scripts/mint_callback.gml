@@ -19,3 +19,11 @@ else
 {
     argument0[? "value"] = snapY;
 }
+#define mint_callback_switch_bool
+///mint_callback_switch_bool(button, value)
+
+var b = variable_instance_get(id, argument1);
+b = !b;
+
+argument0[? "on"] = b;
+variable_instance_set(id, argument1, b);

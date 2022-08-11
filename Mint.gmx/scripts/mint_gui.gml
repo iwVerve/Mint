@@ -15,8 +15,10 @@ for(var i = 0; i < array_length_1d(buttons); i++)
     
     if (hoveredButton == _button)
         draw_set_color(colorButtonHover);
-    else
+    else if (_button[? "on"])
         draw_set_color(colorButton);
+    else
+        draw_set_color(colorButtonOff);
     mint_draw_rounded_rectangle(_button[? "x"] + _ox, _button[? "y"] + _oy, _button[? "x"] + _button[? "width"] - 1 + _ox, _button[? "y"] + _button[? "height"] - 1 + _oy, _button[? "radius"]);
     
     if (_button[? "sprite"] > -1)
@@ -36,7 +38,7 @@ for(var i = 0; i < array_length_1d(buttons); i++)
     }
 }
 
-draw_set_font(fEditor);
+draw_set_font(font);
 for(var i = 0; i < array_length_1d(textboxes); i++)
 {
     var _textbox = textboxes[i];
@@ -62,12 +64,20 @@ for(var i = 0; i < array_length_1d(textboxes); i++)
 }
 
 #define mint_highlight_rectangle
-///mint_highlight_rectangle(x1, y1, x2, y2, alpha);
+///mint_highlight_rectangle(x1, y1, x2, y2, alpha, adjustForZoom);
 
 var x1 = (argument0 - view_xview) * zoom;
 var y1 = (argument1 - view_yview) * zoom;
-var x2 = (argument2 - view_xview) * zoom;
-var y2 = (argument3 - view_yview) * zoom;
+if (!argument5)
+{
+    var x2 = (argument2 - view_xview) * zoom;
+    var y2 = (argument3 - view_yview) * zoom;
+}
+else
+{
+    var x2 = (argument2 - view_xview + 1) * zoom - 1;
+    var y2 = (argument3 - view_yview + 1) * zoom - 1;
+}
 
 draw_set_alpha(argument4);
     draw_set_color(c_white);
@@ -157,6 +167,8 @@ if (argument_count >= 11)
     _button[? "visible"] = argument[10];
 }
 
+_button[? "on"] = true;
+
 buttons[_index] = _button;
 
 return _button;
@@ -227,7 +239,7 @@ for(var i = 0; i < 8; i++)
     var r = 4 / zoom;
     var xx = scaleHandles[i, 0];
     var yy = scaleHandles[i, 1];
-    mint_highlight_rectangle(xx-r, yy-r, xx+r, yy+r, 1);
+    mint_highlight_rectangle(xx-r, yy-r, xx+r, yy+r, 1, false);
 }
 
 #define mint_get_scale_handles
@@ -321,20 +333,3 @@ if (argument_count >= 13)
 textboxes[_index] = _textbox;
 
 return _textbox;
-#define mint_add_gui_elements
-///mint_add_gui_elements()
-
-mint_add_button(6, 6, "tl", 88, 30, 6, sprMintIcon, 0, print, "Hello");
-mint_add_button(98, 6, "tl", 88, 30, 6, sprMintIcon, 1, print, "Hello");
-mint_add_button(6, 40, "tl", 88, 30, 6, sprMintIcon, 2, print, "Hello");
-mint_add_button(98, 40, "tl", 88, 30, 6, sprMintIcon, 3, print, "Hello");
-mint_add_button(6, 74, "tl", 88, 30, 6, sprMintIcon, 4, print, "Hello");
-mint_add_button(98, 74, "tl", 88, 30, 6, sprMintIcon, 5, print, "Hello");
-
-for(var i = 0; i < 4; i++)
-{
-    mint_add_button(6 + 46 * i, 6, "l", 42, 42, 6, sprMiku+i, 0, print, "Hello");
-}
-
-mint_add_textbox(4, 6, "t", 32, 20, 6, snapX, true, mint_callback_update_snap, mint_callback_finish_snap, true, true);
-mint_add_textbox(40, 6, "t", 32, 20, 6, snapY, true, mint_callback_update_snap, mint_callback_finish_snap, false, false);

@@ -25,24 +25,97 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//Config
-mint_config();
+            <string>///Config
 
+//Behavior
+ignore = array_create(0);
+ignore[0] = object_index;
+ignore[1] = objWorld;
+ignore[2] = objTriggerManager;
+ignore[3] = objPlayer;
+ignore[4] = objBow;
+
+
+//Keybinds
+bindPlaytest = vk_enter;
+bindRestart = ord('R');
+
+
+//Visual
+wview = 800;
+hview = 608;
+
+defaultSprite = sprSecretItem;
+viewLerp = 0.25;
+font = fMint;
+
+
+//Colors
+colorFillDark = make_color_rgb(47, 63, 59);
+colorFillLight = make_color_rgb(114, 153, 143);
+
+colorButton = make_color_rgb(184, 216, 208);
+colorButtonHover = make_color_rgb(220, 247, 240);
+colorButtonOff = make_color_rgb(86, 114, 107);
+
+colorTextbox = make_color_rgb(220, 247, 240);
+colorTextboxHover = make_color_rgb(242, 252, 249);
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Room variables
 
 //Room
 instances = array_create(0);
 tiles = array_create(0);
 backgrounds = array_create(0);
+for (var b = 0; b &lt; 8; b++)
+{
+    backgrounds[b] = ds_map_create();
+}
 backgroundColor = noone;
 
 roomWidth = -1;
 roomHeight = -1;
 roomSpeed = -1;
-
-
-//Layout
-wview = 800;
-hview = 608;
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>//Layout
 tlm = 108; //Top left height
 lm = 192; //Left margin
 tm = 32; //Top margin
@@ -51,16 +124,6 @@ bm = 32; //Bottom margin
 sw = wview+lm+rm;
 sh = hview+tm+bm;
 
-
-//Colors
-colorFillDark = make_color_rgb(47, 63, 59);
-colorFillLight = make_color_rgb(114, 153, 143);
-colorButton = make_color_rgb(184, 216, 208);
-colorButtonHover = make_color_rgb(220, 247, 240);
-
-colorTextbox = make_color_rgb(220, 247, 240);
-colorTextboxHover = make_color_rgb(242, 252, 249);
-                        
 
 //Window positions
 windowPlaytestX = 0;
@@ -86,7 +149,6 @@ viewTargetX = 0;
 viewTargetY = 0;
 viewX = viewTargetX;
 viewY = viewTargetY;
-viewLerp = 0.25;
 targetZoom = 1;
 zoom = targetZoom;
 
@@ -96,7 +158,6 @@ clickStartY = 0;
 snapX = 32;
 snapY = 32;
 tooltip = "";
-font = fEditor;
 
 selectionLeft = 0;
 selectionTop = 0;
@@ -108,8 +169,31 @@ objectPalette = ds_list_create();
 mint_get_scale_handles();
 scaleState = 0
 
+showGrid = true;
 
-//GUI Elements
+
+mint_mouse_update(true);
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///GUI
 hoveredButton = noone;
 buttons = array_create(0);
 
@@ -118,11 +202,53 @@ selectedTextbox = noone;
 textboxes = array_create(0);
 textboxTimer = 0;
 
-mint_add_gui_elements();
+//Top left
+mint_add_button(6, 6, "tl", 88, 30, 6, sprMintIcon, 0, nop);
+mint_add_button(98, 6, "tl", 88, 30, 6, sprMintIcon, 1, nop);
+mint_add_button(6, 40, "tl", 88, 30, 6, sprMintIcon, 2, nop);
+mint_add_button(98, 40, "tl", 88, 30, 6, sprMintIcon, 3, nop);
+mint_add_button(6, 74, "tl", 88, 30, 6, sprMintIcon, 4, nop);
+mint_add_button(98, 74, "tl", 88, 30, 6, sprMintIcon, 5, nop);
 
+//Left
+for(var i = 0; i &lt; 4; i++)
+{
+    mint_add_button(6 + 46 * i, 6, "l", 42, 42, 6, sprMiku+i, 0, nop);
+}
 
+//Top
+mint_add_button(2, 4, "t", 24, 24, 4, sprMintIconMini, 0, nop);
+mint_add_button(46, 4, "t", 24, 24, 4, sprMintIconMini, 1, mint_callback_switch_bool, "showGrid");
+mint_add_textbox(74, 4, "t", 32, 24, 4, snapX, true, mint_callback_update_snap, mint_callback_finish_snap, true, true);
+mint_add_textbox(110, 4, "t", 32, 24, 4, snapY, true, mint_callback_update_snap, mint_callback_finish_snap, false, false);
+mint_add_button(162, 4, "t", 24, 24, 4, sprMintIconMini, 2, nop);
+mint_add_button(190, 4, "t", 24, 24, 4, sprMintIconMini, 3, nop);
+mint_add_button(218, 4, "t", 24, 24, 4, sprMintIconMini, 4, nop);
+mint_add_button(246, 4, "t", 24, 24, 4, sprMintIconMini, 5, nop);
+mint_add_button(274, 4, "t", 24, 24, 4, sprMintIconMini, 6, nop);
+mint_add_button(302, 4, "t", 24, 24, 4, sprMintIconMini, 7, nop);
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Start
 
-mint_mouse_update(true);
 room_goto(room);
 </string>
           </argument>
@@ -458,7 +584,7 @@ if (mode == "instances")
         }
         if (hoveredButton != noone &amp;&amp; mouse_check_button_pressed(mb_left))
         {
-            script_execute(hoveredButton[? "callback"], hoveredButton[? "callback arg"]);
+            script_execute(hoveredButton[? "callback"], hoveredButton, hoveredButton[? "callback arg"]);
         }
         if (hoveredButton == noone)
         {
@@ -894,19 +1020,28 @@ else if (state == "playtest")
     var xx = view_xview, yy = view_yview;
     mint_mouse_update();
     
-    draw_set_color(c_black);
-    draw_set_alpha(0.15);
-        for(var xx = -view_xview * zoom; xx &lt; (room_width - view_xview) * zoom; xx += snapX * zoom)
-        {
-            draw_line(xx, -view_yview * zoom, xx, (room_height - view_yview) * zoom);
-        }
-        draw_line((room_width - view_xview) * zoom, -view_yview * zoom, (room_width - view_xview) * zoom, (room_height - view_yview) * zoom);
-        for(var yy = -view_yview * zoom; yy &lt; (room_height - view_yview) * zoom; yy += snapY * zoom)
-        {
-            draw_line(-view_xview * zoom, yy, (room_width - view_xview) * zoom, yy);
-        }
-        draw_line(-view_xview * zoom, (room_height - view_yview) * zoom, (room_width - view_xview) * zoom, (room_height - view_yview) * zoom);
-    draw_set_alpha(1);
+    if (showGrid)
+    {
+        draw_set_color(c_black);
+        draw_set_alpha(0.15);
+            if (snapX &gt; 1)
+            {
+                for(var xx = -view_xview * zoom; xx &lt; (room_width - view_xview) * zoom; xx += snapX * zoom)
+                {
+                    draw_line(xx, -view_yview * zoom, xx, (room_height - view_yview) * zoom);
+                }
+                draw_line((room_width - view_xview) * zoom, -view_yview * zoom, (room_width - view_xview) * zoom, (room_height - view_yview) * zoom);
+            }
+            if (snapY &gt; 1)
+            {
+                for(var yy = -view_yview * zoom; yy &lt; (room_height - view_yview) * zoom; yy += snapY * zoom)
+                {
+                    draw_line(-view_xview * zoom, yy, (room_width - view_xview) * zoom, yy);
+                }
+                draw_line(-view_xview * zoom, (room_height - view_yview) * zoom, (room_width - view_xview) * zoom, (room_height - view_yview) * zoom);
+            }
+        draw_set_alpha(1);
+    }
     
     var alpha = (dsin(current_time / 5) + 1) / 8 + 0.25;
     d3d_set_fog(1, c_blue, 0, 0);
@@ -921,16 +1056,16 @@ else if (state == "playtest")
     
     if (hoveredInstance != noone)
     {
-        mint_highlight_rectangle(hoveredInstance.bbox_left, hoveredInstance.bbox_top, hoveredInstance.bbox_right, hoveredInstance.bbox_bottom, 0.5);
+        mint_highlight_rectangle(hoveredInstance.bbox_left, hoveredInstance.bbox_top, hoveredInstance.bbox_right, hoveredInstance.bbox_bottom, 0.5, true);
     }
     if (!ds_list_empty(selectedInstances))
     {
-        mint_highlight_rectangle(selectionLeft, selectionTop, selectionRight, selectionBottom, 1);
+        mint_highlight_rectangle(selectionLeft, selectionTop, selectionRight, selectionBottom, 1, true);
         mint_draw_scale_handles();
     }
     if (mouseState = "selection")
     {
-        mint_highlight_rectangle(clickStartX, clickStartY, mouse_room_x, mouse_room_y, 1);
+        mint_highlight_rectangle(clickStartX, clickStartY, mouse_room_x, mouse_room_y, 1, true);
     }
     
     draw_set_color(colorFillDark);

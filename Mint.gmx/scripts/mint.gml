@@ -3,7 +3,6 @@
 exit;
 
 //Config
-mint_config()
 mint_on_playtest_start()
 
 //Room
@@ -15,21 +14,6 @@ mint_room_set_backgrounds()
 mint_snap(x, snap)
 mint_restart_playtest()
 mint_get_button_offset(anchor, x)
-
-#define mint_config
-///mint_config()
-
-defaultSprite = sprSecretItem;
-
-ignore = array_create(0);
-ignore[0] = object_index;
-ignore[1] = objWorld;
-ignore[2] = objTriggerManager;
-ignore[3] = objPlayer;
-ignore[4] = objBow;
-
-bindPlaytest = vk_enter;
-bindRestart = ord('R');
 
 #define mint_on_playtest_start
 ///mint_on_playtest_start()
@@ -82,16 +66,17 @@ for(var i = 0; i < array_length_1d(roomTiles); i++)
 
 for(var i = 0; i < 8; i++)
 {
-    backgrounds[i, 0] = background_visible[i];
-    backgrounds[i, 1] = background_index[i]
-    backgrounds[i, 2] = background_foreground[i];
-    backgrounds[i, 3] = background_x[i];
-    backgrounds[i, 4] = background_y[i];
-    backgrounds[i, 5] = background_htiled[i];
-    backgrounds[i, 6] = background_vtiled[i];
-    backgrounds[i, 7] = background_hspeed[i];
-    backgrounds[i, 8] = background_vspeed[i];
-    backgrounds[i, 9] = (background_width[i] == room_width);
+    var bg = backgrounds[i];
+    bg[? "visible"] = background_visible[i];
+    bg[? "index"] = background_index[i];
+    bg[? "foreground"] = background_foreground[i];
+    bg[? "x"] = background_x[i];
+    bg[? "y"] = background_y[i];
+    bg[? "htiled"] = background_htiled[i];
+    bg[? "vtiled"] = background_vtiled[i];
+    bg[? "hspeed"] = background_hspeed[i];
+    bg[? "vspeed"] = background_vspeed[i];
+    bg[? "stretch"] = (background_width[i] == room_width);
 }
 
 backgroundColor = noone;
@@ -160,16 +145,17 @@ room_goto(playtestRoom);
     
 for (var i = 0; i < 8; i++)
 {
-    background_visible[i] = backgrounds[i, 0];
-    background_index[i] = backgrounds[i, 1];
-    background_foreground[i] = backgrounds[i, 2];
-    background_x[i] = backgrounds[i, 3];
-    background_y[i] = backgrounds[i, 4];
-    background_htiled[i] = backgrounds[i, 5];
-    background_vtiled[i] = backgrounds[i, 6];
-    background_hspeed[i] = backgrounds[i, 7];
-    background_vspeed[i] = backgrounds[i, 8];
-    if (backgrounds[i, 9])
+    var bg = backgrounds[i];
+    background_visible[i] = bg[? "visible"];
+    background_index[i] = bg[? "index"];
+    background_foreground[i] = bg[? "foreground"];
+    background_x[i] = bg[? "x"];
+    background_y[i] = bg[? "y"];
+    background_htiled[i] = bg[? "htiled"];
+    background_vtiled[i] = bg[? "vtiled"];
+    background_hspeed[i] = bg[? "hspeed"];
+    background_vspeed[i] = bg[? "vspeed"];
+    if (bg[? "stretch"])
     {
         background_xscale[i] = room_width / background_width[i];
         background_yscale[i] = room_height / background_height[i];
