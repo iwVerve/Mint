@@ -230,7 +230,8 @@ mint_add_button(190, 4, "t", 24, 24, 4, sprMintIconMini, 3, "Show instances of i
 mint_add_button(218, 4, "t", 24, 24, 4, sprMintIconMini, 4, "Show tiles", mint_callback_switch, "showTiles");
 mint_add_button(246, 4, "t", 24, 24, 4, sprMintIconMini, 5, "Show backgrounds", mint_callback_switch, "showBackgrounds");
 mint_add_button(274, 4, "t", 24, 24, 4, sprMintIconMini, 6, "Show foregrounds", mint_callback_switch, "showForegrounds");
-mint_add_button(302, 4, "t", 24, 24, 4, sprMintIconMini, 7, "Show views", nop);
+var v = mint_add_button(302, 4, "t", 24, 24, 4, sprMintIconMini, 7, "Show views", nop);
+v[? "on"] = false;
 </string>
           </argument>
         </arguments>
