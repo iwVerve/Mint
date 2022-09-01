@@ -144,6 +144,8 @@ playtestRoom = room_add();
 
 selectedInstances = ds_list_create();
 hoveredInstance = noone;
+instancePreviewX = 0;
+instancePreviewY = 0;
 
 viewTargetX = 0;
 viewTargetY = 0;
@@ -165,6 +167,8 @@ selectionRight = 0;
 selectionBottom = 0;
 
 objectPalette = ds_list_create();
+paletteButtons = 0;
+selectedObject = objBlock;
 
 mint_get_scale_handles();
 scaleState = 0
@@ -207,12 +211,12 @@ textboxes = array_create(0);
 textboxTimer = 0;
 
 //Top left
-mint_add_button(6, 6, "tl", 88, 30, 6, sprMintIcon, 0, "Save", nop);
-mint_add_button(98, 6, "tl", 88, 30, 6, sprMintIcon, 1, "Room settings", nop);
-mint_add_button(6, 40, "tl", 88, 30, 6, sprMintIcon, 2, "Instances", nop);
-mint_add_button(98, 40, "tl", 88, 30, 6, sprMintIcon, 3, "Tiles", nop);
-mint_add_button(6, 74, "tl", 88, 30, 6, sprMintIcon, 4, "Backgrounds", nop);
-mint_add_button(98, 74, "tl", 88, 30, 6, sprMintIcon, 5, "Views", nop);
+//mint_add_button(6, 6, "tl", 88, 30, 6, sprMintIcon, 0, "Save", nop);
+//mint_add_button(98, 6, "tl", 88, 30, 6, sprMintIcon, 1, "Room settings", nop);
+//mint_add_button(6, 40, "tl", 88, 30, 6, sprMintIcon, 2, "Instances", nop);
+//mint_add_button(98, 40, "tl", 88, 30, 6, sprMintIcon, 3, "Tiles", nop);
+//mint_add_button(6, 74, "tl", 88, 30, 6, sprMintIcon, 4, "Backgrounds", nop);
+//mint_add_button(98, 74, "tl", 88, 30, 6, sprMintIcon, 5, "Views", nop);
 
 //Left
 for(var i = 0; i &lt; 4; i++)
@@ -221,7 +225,7 @@ for(var i = 0; i &lt; 4; i++)
 }
 
 //Top
-mint_add_button(2, 4, "t", 24, 24, 4, sprMintIconMini, 0, "Undo", nop);
+//mint_add_button(2, 4, "t", 24, 24, 4, sprMintIconMini, 0, "Undo", nop);
 mint_add_button(46, 4, "t", 24, 24, 4, sprMintIconMini, 1, "Show grid", mint_callback_switch, "showGrid");
 mint_add_textbox(74, 4, "t", 32, 24, 4, snapX, true, "", mint_callback_update_snap, mint_callback_finish_snap, true, true);
 mint_add_textbox(110, 4, "t", 32, 24, 4, snapY, true, "", mint_callback_update_snap, mint_callback_finish_snap, false, false);
@@ -230,8 +234,8 @@ mint_add_button(190, 4, "t", 24, 24, 4, sprMintIconMini, 3, "Show instances of i
 mint_add_button(218, 4, "t", 24, 24, 4, sprMintIconMini, 4, "Show tiles", mint_callback_switch, "showTiles");
 mint_add_button(246, 4, "t", 24, 24, 4, sprMintIconMini, 5, "Show backgrounds", mint_callback_switch, "showBackgrounds");
 mint_add_button(274, 4, "t", 24, 24, 4, sprMintIconMini, 6, "Show foregrounds", mint_callback_switch, "showForegrounds");
-var v = mint_add_button(302, 4, "t", 24, 24, 4, sprMintIconMini, 7, "Show views", nop);
-v[? "on"] = false;
+//var v = mint_add_button(302, 4, "t", 24, 24, 4, sprMintIconMini, 7, "Show views", nop);
+//v[? "on"] = false;
 </string>
           </argument>
         </arguments>
@@ -408,6 +412,9 @@ if (mouse_check_button_pressed(mb_left))
 
 if (mode == "instances")
 {
+    instancePreviewX = snapX * floor(mouse_room_x / snapX);
+    instancePreviewY = snapY * floor(mouse_room_y / snapY);
+
     if (mint_mouse_in_room_view())
     {
         switch(mouseState)
@@ -417,41 +424,36 @@ if (mode == "instances")
                 {
                     clickStartX = mouse_room_x;
                     clickStartY = mouse_room_y;
-                    mouseState = "wait";
+                    scaleState = mint_check_for_scale_handle(mouse_room_x, mouse_room_y);
                     
-                    if (!keyboard_check(vk_control))
+                    if (scaleState != noone)
                     {
-                        scaleState = mint_check_for_scale_handle(mouse_room_x, mouse_room_y);
-                        if (scaleState != noone)
+                        //Clicking a scale handle
+                        mouseState = "scale";
+                    }
+                    else 
+                    {
+                        if (keyboard_check(vk_shift))
                         {
-                            mouseState = "scale";
+                            mouseState = "selection";
+                        }
+                        else if (hoveredInstance == noone)
+                        {
+                            //Clicking empty space
+                            
                         }
                         else
                         {
-                            if (ds_list_find_index(selectedInstances, hoveredInstance) == -1)
-                            {
-                                ds_list_clear(selectedInstances);
-                                if (hoveredInstance != noone)
-                                {
-                                    ds_list_add(selectedInstances, hoveredInstance);
-                                }
-                                mint_update_selection_boundary();
-                            }
+                            //Clicking on an instance
+                            mouseState = "wait";
                         }
                     }
                 }
                 break;
             case "wait":
-                if (mouse_room_x != clickStartX || mouse_room_y != clickStartY)
+                if ((mouse_room_x != clickStartX || mouse_room_y != clickStartY))
                 {
-                    if (ds_list_empty(selectedInstances) || keyboard_check(vk_control))
-                    {
-                        mouseState = "selection";
-                    }
-                    else
-                    {
-                        mouseState = "drag";
-                    }
+                    mouseState = "drag";
                 }
                 else if (mouse_check_button_released(mb_left))
                 {
@@ -624,7 +626,7 @@ if (mode == "instances")
             }
         }
     }
-    
+        
     //Fallback to make sure mouse state doesn't get stuck
     if (!mouse_check_button(mb_left))
     {
@@ -920,6 +922,8 @@ else if (state == "editor")
 
     mint_destroy_everything_else();
     
+    ds_list_clear(objectPalette);
+    
     //Make instances
     for(var i = 0; i &lt; array_height_2d(instances); i++)
     {
@@ -946,6 +950,11 @@ else if (state == "editor")
     }
     
     ds_list_sort(objectPalette, true);
+    
+    for(var i = 0; i &lt; ds_list_size(objectPalette); i++)
+    {
+        mint_add_object_to_palette(objectPalette[| i]);
+    }
     
     //Make tiles
     for(var i = 0; i &lt; array_height_2d(tiles); i++)
@@ -1070,6 +1079,15 @@ else if (state == "playtest")
             <kind>1</kind>
             <string>var xx = view_xview, yy = view_yview;
 mint_mouse_update();
+
+if (mode = "instances")
+{
+    var sprite = object_get_sprite(selectedObject);
+    if (sprite != -1 &amp;&amp; hoveredInstance == noone)
+    {
+        draw_sprite_ext(sprite, 0, (instancePreviewX - view_xview) * zoom, (instancePreviewY - view_yview) * zoom, zoom, zoom, 0, c_white, 1);
+    }
+}
 
 if (showGrid)
 {

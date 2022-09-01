@@ -34,7 +34,7 @@ for(var i = 0; i < array_length_1d(buttons); i++)
         var _angle = 0;
         var _blend = c_white;
         var _alpha = 1;
-        draw_sprite_ext(_sprite, _image, _x, _y, _xscale, _yscale, _angle, _blend, _alpha);
+        draw_sprite_ext(_sprite, _image, floor(_x), floor(_y), _xscale, _yscale, _angle, _blend, _alpha);
     }
 }
 
@@ -337,3 +337,19 @@ _textbox[? "display text"] = _textbox[? "value"];
 textboxes[_index] = _textbox;
 
 return _textbox;
+#define mint_add_object_to_palette
+///mint_add_object_to_palette(object)
+
+var object = argument0;
+
+var col = paletteButtons % 4;
+var row = floor(paletteButtons / 4);
+
+var sprite = object_get_sprite(object);
+if (sprite == -1)
+{
+    sprite = defaultSprite;
+}
+
+mint_add_button(6 + 46 * col, 6 + 46 * row, "l", 42, 42, 6, sprite, 0, object_get_name(object), mint_callback_select_object, object);
+paletteButtons++;
