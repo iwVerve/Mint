@@ -275,7 +275,6 @@
     <script>scripts\mint_gui.gml</script>
     <script>scripts\mint_util.gml</script>
     <script>scripts\mint_callback.gml</script>
-    <script>scripts\nop.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fDefault30</font>

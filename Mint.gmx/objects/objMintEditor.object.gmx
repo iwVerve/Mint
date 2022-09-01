@@ -218,12 +218,6 @@ textboxTimer = 0;
 //mint_add_button(6, 74, "tl", 88, 30, 6, sprMintIcon, 4, "Backgrounds", nop);
 //mint_add_button(98, 74, "tl", 88, 30, 6, sprMintIcon, 5, "Views", nop);
 
-//Left
-for(var i = 0; i &lt; 4; i++)
-{
-    mint_add_button(6 + 46 * i, 6, "l", 42, 42, 6, sprMiku+i, 0, "", nop);
-}
-
 //Top
 //mint_add_button(2, 4, "t", 24, 24, 4, sprMintIconMini, 0, "Undo", nop);
 mint_add_button(46, 4, "t", 24, 24, 4, sprMintIconMini, 1, "Show grid", mint_callback_switch, "showGrid");
