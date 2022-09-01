@@ -167,7 +167,7 @@ selectionRight = 0;
 selectionBottom = 0;
 
 objectPalette = ds_list_create();
-paletteButtons = 0;
+paletteButtons = array_create(0);
 selectedObject = objBlock;
 
 mint_get_scale_handles();
@@ -435,16 +435,55 @@ if (mode == "instances")
                     {
                         if (keyboard_check(vk_shift))
                         {
+                            if (!keyboard_check(vk_control))
+                            {
+                                ds_list_clear(selectedInstances);
+                                mint_update_selection_boundary();
+                            }
+                        
                             mouseState = "selection";
                         }
                         else if (hoveredInstance == noone)
                         {
                             //Clicking empty space
+                            if (!keyboard_check(vk_control))
+                            {
+                                ds_list_clear(selectedInstances);
+                                mint_update_selection_boundary();
+                            }
                             
+                            mouseState = "placing";
+                        }
+                        else if (ds_list_find_index(selectedInstances, hoveredInstance) &gt; -1)
+                        {
+                            //Clicking selected instance
+                            if (keyboard_check(vk_control))
+                            {
+                                var index = ds_list_find_index(selectedInstances, hoveredInstance);
+                                if (index == -1)
+                                {
+                                    ds_list_add(selectedInstances, hoveredInstance);
+                                }
+                                else
+                                {
+                                    ds_list_delete(selectedInstances, index);
+                                }
+                                mint_update_selection_boundary();
+                            }
+                            
+                            mouseState = "wait";
                         }
                         else
                         {
-                            //Clicking on an instance
+                            //Clicking unselected instance
+                            if (!keyboard_check(vk_control))
+                            {
+                                ds_list_clear(selectedInstances);
+                            }
+                            
+                            ds_list_add(selectedInstances, hoveredInstance);
+                            mint_update_selection_boundary();
+                            
                             mouseState = "wait";
                         }
                     }
@@ -460,28 +499,14 @@ if (mode == "instances")
                     if (!keyboard_check(vk_control))
                     {
                         ds_list_clear(selectedInstances);
+                        
                         if (hoveredInstance != noone)
                         {
                             ds_list_add(selectedInstances, hoveredInstance);
                         }
                         mint_update_selection_boundary();
                     }
-                    else
-                    {
-                        if (hoveredInstance != noone)
-                        {
-                            var index = ds_list_find_index(selectedInstances, hoveredInstance);
-                            if (index == -1)
-                            {
-                                ds_list_add(selectedInstances, hoveredInstance);
-                            }
-                            else
-                            {
-                                ds_list_delete(selectedInstances, index);
-                            }
-                            mint_update_selection_boundary();
-                        }
-                    }
+                
                     mouseState = "none";
                 }
                 break;
@@ -560,6 +585,24 @@ if (mode == "instances")
                     } 
                     if (xFlip) scaleState[0] *= -1;
                     if (yFlip) scaleState[1] *= -1;
+                    mint_update_selection_boundary();
+                }
+                break;
+            case "placing":
+                if (hoveredInstance == noone)
+                {
+                    with(instance_create(instancePreviewX, instancePreviewY, objMintInstance))
+                    {
+                        object = other.selectedObject;
+                        var sprite = object_get_sprite(object);
+                        if (sprite == -1)
+                        {
+                            sprite = other.defaultSprite;
+                        }
+                        sprite_index = sprite;
+                        
+                        ds_list_add(other.selectedInstances, id);
+                    }
                     mint_update_selection_boundary();
                 }
                 break;
@@ -949,11 +992,14 @@ else if (state == "editor")
         }
     }
     
-    ds_list_sort(objectPalette, true);
-    
-    for(var i = 0; i &lt; ds_list_size(objectPalette); i++)
+    if (array_length_1d(paletteButtons) == 0)
     {
-        mint_add_object_to_palette(objectPalette[| i]);
+        ds_list_sort(objectPalette, true);
+        
+        for(var i = 0; i &lt; ds_list_size(objectPalette); i++)
+        {
+            mint_add_object_to_palette(objectPalette[| i]);
+        }
     }
     
     //Make tiles
@@ -1080,12 +1126,12 @@ else if (state == "playtest")
             <string>var xx = view_xview, yy = view_yview;
 mint_mouse_update();
 
-if (mode = "instances")
+if (mode = "instances" &amp;&amp; mouseState = "none")
 {
     var sprite = object_get_sprite(selectedObject);
     if (sprite != -1 &amp;&amp; hoveredInstance == noone)
     {
-        draw_sprite_ext(sprite, 0, (instancePreviewX - view_xview) * zoom, (instancePreviewY - view_yview) * zoom, zoom, zoom, 0, c_white, 1);
+        draw_sprite_ext(sprite, 0, (instancePreviewX - view_xview) * zoom, (instancePreviewY - view_yview) * zoom, zoom, zoom, 0, c_white, 0.5);
     }
 }
 
