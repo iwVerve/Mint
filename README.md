@@ -55,4 +55,4 @@ function while playtesting. Instead, move the player start around.
 ## Saving
 
 Ctrl+S saves the project in your game's save folder - %localappdata%\your_project_name\. Import the room file into your project,
-and replace the old room.
+and replace the old room. (There is currently no feedback from the editor when you save a room, I'd recommend just checking the folder.)
