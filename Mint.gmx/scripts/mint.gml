@@ -175,7 +175,8 @@ else
 ///mint_save_room()
 
 mint_regenerate_arrays();
-var name = string(current_year);
+var name = "mint-";
+name += string(current_year);
 name += "-";
 if (current_month < 10) name += "0";
 name += string(current_month);
@@ -202,7 +203,7 @@ roomStr += "  <caption></caption>" + nl;
 roomStr += "  <width>" + string(roomWidth) + "</width>" + nl;
 roomStr += "  <height>" + string(roomHeight) + "</height>" + nl;
 roomStr += "  <vsnap>16</vsnap>" + nl;
-roomStr += "  <vsnap>16</vsnap>" + nl;
+roomStr += "  <hsnap>16</hsnap>" + nl;
 roomStr += "  <isometric>0</isometric>" + nl;
 roomStr += "  <speed>" + string(roomSpeed) + "</speed>" + nl;
 roomStr += "  <persistent>0</persistent>" + nl;
@@ -283,19 +284,20 @@ roomStr += "  <instances>" + nl;
 for(var i = 0; i < array_height_2d(instances); i++)
 {
     var instName = "inst_";
-    repeat(16) instName += choose("1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F");
+    repeat(8) instName += choose("1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F");
     
     roomStr += "    <instance ";
     
     roomStr += 'objName="' + object_get_name(instances[i, 0]) + '" ';
     roomStr += 'x="' + string(instances[i, 1]) + '" ';
     roomStr += 'y="' + string(instances[i, 2]) + '" ';
-    roomStr += 'name="inst_' + instName + '" ';
+    roomStr += 'name="' + instName + '" ';
     roomStr += 'locked="0" ';
     roomStr += 'code="" ';
     roomStr += 'scaleX="' + string(instances[i, 3]) + '" ';
     roomStr += 'scaleY="' + string(instances[i, 4]) + '" ';
-    roomStr += 'colour="' + string(instances[i, 5]) + '" ';
+    //roomStr += 'colour="' + string(instances[i, 5]) + '" ';
+    roomStr += 'colour="4294967295" ';
     roomStr += 'rotation="' + string(instances[i, 6]) + '" ';
     
     roomStr += "/>" + nl;
@@ -307,7 +309,7 @@ roomStr += "  <tiles>" + nl;
 for(var i = 0; i < array_height_2d(tiles); i++)
 {
     var instName = "inst_";
-    repeat(16) instName += choose("1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F");
+    repeat(8) instName += choose("1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F");
 
     roomStr += "    <tile ";
     
@@ -319,10 +321,11 @@ for(var i = 0; i < array_height_2d(tiles); i++)
     roomStr += 'xo="' + string(tiles[i, 5]) + '" ';
     roomStr += 'yo="' + string(tiles[i, 6]) + '" ';
     roomStr += 'id="' + string(10000000 + i) + '" ';    
-    roomStr += 'name="tile_' + instName + '" ';
+    roomStr += 'name="' + instName + '" ';
     roomStr += 'depth="' + string(tiles[i, 7]) + '" ';
     roomStr += 'locked="0" ';
-    roomStr += 'colour="' + string(tiles[i, 8]) + '" ';
+    //roomStr += 'colour="' + string(tiles[i, 8]) + '" ';
+    roomStr += 'colour="4294967295" ';
     roomStr += 'scaleX="' + string(tiles[i, 9]) + '" ';
     roomStr += 'scaleY="' + string(tiles[i, 10]) + '" ';
         
