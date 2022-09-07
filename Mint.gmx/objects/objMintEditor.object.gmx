@@ -709,6 +709,10 @@ if (mint_mouse_in_room_view())
 }
 
 textboxTimer = (textboxTimer + 1) mod 40;
+
+if (keyboard_check(vk_control) &amp;&amp; keyboard_check_pressed(ord("S"))) {
+    mint_save_room();
+}
 </string>
           </argument>
         </arguments>
