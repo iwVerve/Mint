@@ -1021,7 +1021,7 @@ else if (state == "editor")
 }
 else if (state == "start playtest")
 {
-    mint_on_playtest_start();
+    mint_on_playtest_start(false);
 
     for (var i = 0; i &lt; array_height_2d(instances); i++)
     {
@@ -1058,6 +1058,8 @@ else if (state == "start playtest")
             event_perform(ev_other, ev_room_start);
         }
     }
+    
+    mint_on_playtest_start(true);
         
     state = "playtest";
 }

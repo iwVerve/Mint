@@ -3,7 +3,7 @@
 exit;
 
 //Config
-mint_on_playtest_start()
+mint_on_playtest_start(early)
 
 //Room
 mint_get_room()
@@ -18,7 +18,18 @@ mint_get_button_offset(anchor, x)
 #define mint_on_playtest_start
 ///mint_on_playtest_start()
 
-global.grav = 1;
+var early = !argument0;
+
+if early
+{
+    //Runs before the room gets created, useful for setting global.
+    global.grav = 1;
+}
+else
+{
+    //Runs after instances get placed in the room.
+    with(objBlock) {visible = true;}
+}
 
 #define mint_get_room
 ///mint_get_room()
@@ -175,21 +186,21 @@ else
 ///mint_save_room()
 
 mint_regenerate_arrays();
-var name = "mint-";
+var name = "Mint/mint_";
 name += string(current_year);
-name += "-";
+name += "_";
 if (current_month < 10) name += "0";
 name += string(current_month);
-name += "-";
+name += "_";
 if (current_day < 10) name += "0";
 name += string(current_day);
-name += "-";
+name += "_";
 if (current_hour < 10) name += "0";
 name += string(current_hour);
-name += "-";
+name += "_";
 if (current_minute < 10) name += "0";
 name += string(current_minute);
-name += "-";
+name += "_";
 if (current_second < 10) name += "0";
 name += string(current_second);
 

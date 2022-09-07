@@ -413,8 +413,8 @@
       <room>rooms\rEnd</room>
       <room>rooms\rTest</room>
     </rooms>
-    <room>rooms\mint-2022-09-07-14-50-29</room>
     <room>rooms\rTemplate</room>
+    <room>rooms\rMintTest</room>
   </rooms>
   <help>
     <rtf>help.rtf</rtf>
