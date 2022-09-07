@@ -1124,7 +1124,7 @@ else if (state == "playtest")
             <string>var xx = view_xview, yy = view_yview;
 mint_mouse_update();
 
-if (mode = "instances" &amp;&amp; mouseState = "none")
+if (mode = "instances" &amp;&amp; mouseState = "none" &amp;&amp; !keyboard_check(vk_shift))
 {
     var sprite = object_get_sprite(selectedObject);
     if (sprite != -1 &amp;&amp; hoveredInstance == noone)

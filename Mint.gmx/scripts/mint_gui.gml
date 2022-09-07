@@ -286,7 +286,7 @@ for(var i = 0; i < 8; i++)
 #define mint_check_for_scale_handle
 ///mint_check_for_scale_handle(x, y)
 
-var r = 4 / zoom;
+var r = 6 / zoom;
 for(var i = 0; i < 8; i++)
 {
     if (mint_in_range(argument0, scaleHandles[i, 0] - r, scaleHandles[i, 0] + r) && mint_in_range(argument1, scaleHandles[i, 1] - r, scaleHandles[i, 1] + r))
