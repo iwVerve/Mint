@@ -1,6 +1,6 @@
 # Mint
 
-Mint is a near-live room editor for GameMaker Studio 1. It works by providing a set of assets that you import into your own project.
+Mint is a live room editor for GameMaker Studio 1. It works by providing a set of assets that you import into your own project.
 
 ## Missing features
 
